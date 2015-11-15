@@ -1,0 +1,38 @@
+//Thanks to Alex Posada for his hints on refining this code.
+
+int photoPin = 0; // Analog pin 0 connected to photoresistor
+int transistorPin = 9; // connected to base of transistor
+float photoReading = 0; // place to save value returned from the photoresistor
+
+//declaring variable for second set of motor pins
+int photoPin2 = 1;
+int transistorPin2 = 3;
+float photoReading2 = 0;
+
+void setup() {
+Serial.begin(9600);
+pinMode(transistorPin, OUTPUT); // set the transistor pin as an output
+pinMode(transistorPin2, OUTPUT); //second pin
+}
+
+void loop() {
+//photoresistor value/2 to convert it to between 0 – 255 for digital pin
+photoReading = analogRead(photoPin) / 4;
+photoReading2 = analogRead(photoPin2) /4;
+
+if (photoReading > 255)
+photoReading = 255;
+
+if (photoReading2 > 255)
+photoReading2 = 255;
+
+Serial.print(“original val: “); //to examen the mapped values based on surrounding light
+Serial.println(photoReading);
+
+Serial.print(“original val2: “); //for second set of values
+Serial.println(photoReading2);
+
+photoReading = map (photoReading, 50, 255, 0, 255); //vales mapped based on testing values printed in serial port
+photoReading2 = map (photoReading2, 100, 255, 0, 255);
+
+if (photoReading < 0) photoReading = 0; if (photoReading2 < 0) photoReading2 = 0; Serial.print(“new val: “); Serial.println(photoReading); analogWrite(transistorPin, photoReading); analogWrite(transistorPin2, photoReading2); //second motor delay(200); } [/code]  
